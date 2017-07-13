@@ -14,10 +14,8 @@ export default class AutoSizedImage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // set width 1 is for preventing the warning
-      // You must specify a width and height for the image %s
-      width: this.props.style.width || 1,
-      height: this.props.style.height || 1,
+      width: this.props.style.width || 0,
+      height: this.props.style.height || 0,
     };
   }
 
