@@ -67,7 +67,7 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
             key={index}
             style={parent ? opts.styles[parent.name] : null}
           >
-            {entities.decodeHTML(node.data)}
+            {entities.decodeHTML(node.data?node.data.trim():'')}
           </TextComponent>
         );
       }
