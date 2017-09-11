@@ -1,10 +1,13 @@
 import React from 'react';
 import {
+  View,
   Image,
   Dimensions,
+  TouchableOpacity,
+  Modal
 } from 'react-native';
 
-const {width} = Dimensions.get('window');
+const width =  Dimensions.get('window').width -30;
 
 const baseStyle = {
   backgroundColor: 'transparent',
@@ -14,6 +17,7 @@ export default class AutoSizedImage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      preview: false,
       width: this.props.style.width || 0,
       height: this.props.style.height || 0,
     };
@@ -29,7 +33,15 @@ export default class AutoSizedImage extends React.Component {
     });
   }
 
+  switchPreview= ()=>{
+    const preview =!this.state.preview
+    this.setState({preview});
+  }
+
   render() {
+    const screenWidth =Dimensions.get('window').width;
+    const screenHeight =Dimensions.get('window').height;
+    
     const finalSize = {};
     if (this.state.width > width) {
       finalSize.width = width;
@@ -39,7 +51,7 @@ export default class AutoSizedImage extends React.Component {
     const style = Object.assign(
       baseStyle,
       this.props.style,
-      this.state,
+      {width: this.state.width, height: this.state.height},
       finalSize
     );
     let source = {};
@@ -49,6 +61,17 @@ export default class AutoSizedImage extends React.Component {
       source = Object.assign(source, this.props.source, finalSize);
     }
 
-    return <Image style={style} source={source} />;
+    return (
+      <View style={{width:style.width, height:style.height}}>
+        <TouchableOpacity activeOpacity={.6} onPress={this.switchPreview}>
+          <Image style={style} source={source} ref='img'/>
+        </TouchableOpacity>
+        <Modal visible={this.state.preview} transparent={false} animationType='fade'>
+          <TouchableOpacity activeOpacity={.6} onPress={this.switchPreview} style={{width:screenWidth, height:screenHeight, flex:1, justifyContent:'center', backgroundColor:'#000'}}>
+           <Image style={{width: screenWidth, height: this.state.height * screenWidth/this.state.width}} source={source}/>
+           </TouchableOpacity>
+        </Modal>
+      </View>
+    )
   }
 }
