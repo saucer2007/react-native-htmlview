@@ -63,11 +63,11 @@ export default class AutoSizedImage extends React.Component {
 
     return (
       <View style={{width:style.width, height:style.height}}>
-        <TouchableOpacity activeOpacity={.6} onPress={this.switchPreview}>
+        <TouchableOpacity activeOpacity={1} onPress={this.switchPreview}>
           <Image style={style} source={source} ref='img'/>
         </TouchableOpacity>
-        <Modal visible={this.state.preview} transparent={false} animationType='fade'>
-          <TouchableOpacity activeOpacity={.6} onPress={this.switchPreview} style={{width:screenWidth, height:screenHeight, flex:1, justifyContent:'center', backgroundColor:'#000'}}>
+        <Modal visible={this.state.preview} transparent={false} animationType='fade' onRequestClose={()=>{}}>
+          <TouchableOpacity activeOpacity={1} onPress={this.switchPreview} style={{width:screenWidth, height:screenHeight, flex:1, justifyContent:'center', backgroundColor:'#000'}}>
            <Image style={{width: screenWidth, height: this.state.height * screenWidth/this.state.width}} source={source}/>
            </TouchableOpacity>
         </Modal>
