@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {View, Text, Platform} from 'react-native';
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
 
@@ -11,7 +11,7 @@ const defaultOpts = {
   bullet: '\u2022 ',
   TextComponent: Text,
   textComponentProps: null,
-  NodeComponent: Text,
+  NodeComponent: Platform.OS =='ios'?Text:View,
   nodeComponentProps: null,
 };
 
@@ -45,7 +45,6 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
     if (!dom) return null;
 
     const renderNode = opts.customRenderer;
-
     return dom.map((node, index, list) => {
       if (renderNode) {
         const rendered = renderNode(
@@ -116,17 +115,16 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
         }
 
         const {NodeComponent} = opts;
-
         return (
           <NodeComponent
             {...opts.nodeComponentProps}
             key={index}
             onPress={linkPressHandler}
           >
-            {linebreakBefore}
-            {listItemPrefix}
+            {linebreakBefore?<TextComponent>{linebreakBefore}</TextComponent>:null}
+            {listItemPrefix?<TextComponent>{listItemPrefix}</TextComponent>:null}
             {domToElement(node.children, node)}
-            {linebreakAfter}
+            {linebreakAfter?<TextComponent>{linebreakAfter}</TextComponent>:null}
           </NodeComponent>
         );
       }
